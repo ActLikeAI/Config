@@ -1,0 +1,9 @@
+<Project>
+
+  <PropertyGroup>
+    <BaseOutputPath>$(SolutionDir)Binary</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)Temp\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+</Project>
