@@ -8,19 +8,15 @@ namespace ActLikeAI.Config
 {
     public static class Config
     {
-        public static char NodeSeparator { get; private set; }
+        public static char Separator { get; private set; }
 
 
-        public static char AttributeSeparator { get; private set; }
-
-
-        public static void Load(string defaultsFile, string userDirectory, char nodeSeparator = '.', char attributeSeparator = ':')
+        public static void Load(string defaultsFile, string userDirectory, char separator = '.')
         {                       
             if (string.IsNullOrEmpty(defaultsFile) || string.IsNullOrEmpty(userDirectory))
                 throw new ArgumentException($"Please specify both {nameof(defaultsFile)} and {nameof(userDirectory)}.");
 
-            NodeSeparator = nodeSeparator;
-            AttributeSeparator = attributeSeparator;
+            Separator = separator;
 
             if (IsPathAbsolute(defaultsFile))
                 defaultsLocation = defaultsFile;
@@ -80,28 +76,39 @@ namespace ActLikeAI.Config
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentException($"{nameof(key)} can't be null or empty.");
 
-            string[] tokens = key.Split(new char[] { AttributeSeparator });                                                
-            string[] nodes = tokens[0].Split(new char[] { NodeSeparator });
-                       
-            Node current = root;
-            foreach (var nodeName in nodes)
-            {
-                var next = current.Children.Find(node => node.Name == nodeName);
-                if (next != null)
-                    current = next;
-                else
-                    throw new ArgumentException($"Element {nodeName} not found.");
-            }
+            string[] tokens = key.Split(new char[] { Separator });                                                
+            
+            // Root node is optional. If specified, we simply start counting from the next member of the array. 
+            int start = (tokens[0] == root.Name) ? 1 : 0;
 
-            bool isAttribute = tokens.Length > 1;
-            if (isAttribute)
+            var current = root;
+            var previous = root;
+            int i = start;
+            do
             {
-                string attributeName = tokens[1];
-                var attribute = current.Attributes.Find(attr => attr.Name == attributeName);
-                if (attribute != null)
-                    return attribute.Value;
+                previous = current;
+                current = current.Children.Find(node => node.Name == tokens[i]);
+                i++;
+            }
+            while (i < tokens.Length && current != null);
+
+            // This can happen in two scenarios:
+            if (current is null) 
+            {
+                // 1. We reached then end of the array and the last token wasn't matched,
+                //    so we try to see whether it's an attribute. If yes, we return its value.
+                if (i == tokens.Length)
+                {
+                    var attribute = previous.Attributes.Find(attr => attr.Name == tokens[i - 1]);
+                    if (attribute != null)
+                        return attribute.Value;
+                    else
+                        throw new ArgumentException($"Attribute {tokens[i - 1]} not found.");
+                }
+                // 2. Token wasn't matched somewhere before the end of the array,
+                //    which means that requested node is not present.
                 else
-                    throw new ArgumentException($"Attribute {attributeName} not found.");
+                    throw new ArgumentException($"Node {tokens[i]} not found.");
             }
             else
                 return current.Value;
@@ -122,32 +129,43 @@ namespace ActLikeAI.Config
             if (value == null)
                 throw new ArgumentNullException($"{nameof(value)} can't be null.");
 
-            string[] tokens = key.Split(new char[] { AttributeSeparator });
-            string[] nodes = tokens[0].Split(new char[] { NodeSeparator });
+            string[] tokens = key.Split(new char[] { Separator });
 
-            Node current = root;
-            foreach (var nodeName in nodes)
-            {
-                var next = current.Children.Find(node => node.Name == nodeName);
-                if (next != null)
-                    current = next;
-                else
-                    throw new ArgumentException($"Element {nodeName} not found.");
-            }
+            // Root node is optional. If specified, we simply start counting from the next member of the array. 
+            int start = (tokens[0] == root.Name) ? 1 : 0;
 
-            bool isAttribute = tokens.Length > 1;
-            if (isAttribute)
+            var current = root;
+            var previous = root;
+            int i = start;
+            do
             {
-                string attributeName = tokens[1];
-                var attribute = current.Attributes.Find(attr => attr.Name == attributeName);
-                if (attribute != null)                
-                    attribute.Update(value);                                    
-                else
-                    throw new ArgumentException($"Attribute {attributeName} not found.");
+                previous = current;
+                current = current.Children.Find(node => node.Name == tokens[i]);
+                i++;
             }
-            else            
+            while (i < tokens.Length && current != null);
+
+            // This can happen in two scenarios:
+            if (current is null)
+            {
+                // 1. We reached then end of the array and the last token wasn't matched,
+                //    so we try to see whether it's an attribute. If yes, we return its value.
+                if (i == tokens.Length)
+                {
+                    var attribute = previous.Attributes.Find(attr => attr.Name == tokens[i - 1]);
+                    if (attribute != null)
+                        attribute.Update(value);
+                    else
+                        throw new ArgumentException($"Attribute {tokens[i - 1]} not found.");
+                }
+                // 2. Token wasn't matched somewhere before the end of the array,
+                //    which means that requested node is not present.
+                else
+                    throw new ArgumentException($"Node {tokens[i]} not found.");
+            }
+            else
                 current.Update(value);
-                            
+
             configChanged = true;
         }
 
