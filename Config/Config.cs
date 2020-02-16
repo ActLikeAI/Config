@@ -9,7 +9,7 @@ namespace ActLikeAI.Config
     public static class Config
     {
         public static char Separator { get; private set; }
-
+ 
 
         public static void Load(string defaultsFile, string userDirectory, char separator = '.')
         {                       
@@ -17,7 +17,7 @@ namespace ActLikeAI.Config
                 throw new ArgumentException($"Please specify both {nameof(defaultsFile)} and {nameof(userDirectory)}.");
 
             Separator = separator;
-
+            
             if (IsPathAbsolute(defaultsFile))
                 defaultsLocation = defaultsFile;
             else
@@ -115,11 +115,15 @@ namespace ActLikeAI.Config
         }
 
 
-        public static T Get<T>(string key)
+        public static T Get<T>(string key, IFormatProvider formatProvider)
         {
-            return (T)Convert.ChangeType(Get(key), typeof(T));
+            return (T)Convert.ChangeType(Get(key), typeof(T), formatProvider);
         }
 
+
+        public static T Get<T>(string key)
+            => Get<T>(key, CultureInfo.CurrentCulture);
+        
 
         public static void Set(string key, string value)
         {
@@ -170,7 +174,12 @@ namespace ActLikeAI.Config
         }
 
 
-        public static void Set<T>(string key, T value) => Set(key, value.ToString());
+        public static void Set<T>(string key, T value, IFormatProvider formatProvider) 
+            => Set(key, string.Format(formatProvider, "{0}", value));
+
+
+        public static void Set<T>(string key, T value)
+            => Set<T>(key, value, CultureInfo.CurrentCulture);
 
 
         private static bool IsPathAbsolute(string path) => (Path.GetFullPath(path) == path);
@@ -255,6 +264,6 @@ namespace ActLikeAI.Config
         private static string userLocation;
         private static string currentLocation;
 
-        private static bool configChanged = false;
+        private static bool configChanged = false;        
     }
 }
