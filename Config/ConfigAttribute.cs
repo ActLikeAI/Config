@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ActLikeAI.Config
 {
-    class Node
+    class ConfigAttribute
     {
-        public Node Parent { get; private set; }
+        public ConfigNode Parent { get; private set; }
 
         public string Name { get; private set; }
 
         public string Value { get; private set; }
-       
+
         public bool Changed { get; set; }
 
-        public List<Node> Children { get; } = new List<Node>();
 
-        public List<Attribute> Attributes { get; } = new List<Attribute>();
-
-
-        public Node(Node parent, string name, string value = "")
+        public ConfigAttribute(ConfigNode parent, string name, string value = "")
         {
             Parent = parent;
             Name = name;

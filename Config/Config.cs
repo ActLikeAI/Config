@@ -185,12 +185,12 @@ namespace ActLikeAI.Config
         private static bool IsPathAbsolute(string path) => (Path.GetFullPath(path) == path);
 
 
-        private static Node ParseXml(XElement element, Node parent)
+        private static ConfigNode ParseXml(XElement element, ConfigNode parent)
         {
-            Node node = new Node(parent, element.Name.LocalName);
+            ConfigNode node = new ConfigNode(parent, element.Name.LocalName);
             if (element.HasAttributes)             
                 foreach (var attribute in element.Attributes())                
-                    node.Attributes.Add(new Attribute(node, attribute.Name.LocalName, attribute.Value));
+                    node.Attributes.Add(new ConfigAttribute(node, attribute.Name.LocalName, attribute.Value));
                           
             if (element.HasElements)            
                 foreach (var child in element.Elements())                
@@ -202,7 +202,7 @@ namespace ActLikeAI.Config
         }
 
 
-        private static void UpdateXml(XElement element, Node node)
+        private static void UpdateXml(XElement element, ConfigNode node)
         {
             if (node.Changed)
             {
@@ -238,7 +238,7 @@ namespace ActLikeAI.Config
         }
 
 
-        private static void UpdateNode(Node node, Node update)
+        private static void UpdateNode(ConfigNode node, ConfigNode update)
         {            
             if (node.Value != update.Value)
                 node.Update(update.Value, false);
@@ -259,7 +259,7 @@ namespace ActLikeAI.Config
         }
 
 
-        private static Node root;
+        private static ConfigNode root;
         private static string defaultsLocation;
         private static string userLocation;
         private static string currentLocation;
