@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ActLikeAI.Config
 {
-    class ConfigNode
+    public class ConfigNode
     {
         public ConfigNode Parent { get; private set; }
 

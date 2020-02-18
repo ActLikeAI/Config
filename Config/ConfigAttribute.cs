@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ActLikeAI.Config
 {
-    class ConfigAttribute
+    public class ConfigAttribute
     {
         public ConfigNode Parent { get; private set; }
 
