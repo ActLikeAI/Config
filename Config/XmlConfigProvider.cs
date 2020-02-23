@@ -15,16 +15,16 @@ namespace ActLikeAI.Config
         }
 
 
-        public void Save(ConfigNode root, string defaultsLocation, string userLocation)
+        public void Save(ConfigNode root, string saveLocation)
         {
-            var xmlRoot = File.Exists(userLocation) ? XElement.Load(userLocation) : new XElement(root.Name);
+            var xmlRoot = File.Exists(saveLocation) ? XElement.Load(saveLocation) : new XElement(root.Key);
             UpdateXml(xmlRoot, root);
 
-            string directory = Path.GetDirectoryName(userLocation);
+            string directory = Path.GetDirectoryName(saveLocation);
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
-            xmlRoot.Save(userLocation);
+            xmlRoot.Save(saveLocation);
         }
 
 
@@ -56,11 +56,11 @@ namespace ActLikeAI.Config
                 {
                     if (attribute.Changed)
                     {
-                        var xmlAttribute = element.Attribute(attribute.Name);
+                        var xmlAttribute = element.Attribute(attribute.Key);
                         if (xmlAttribute != null)
                             xmlAttribute.Value = attribute.Value;
                         else
-                            element.Add(new XAttribute(attribute.Name, attribute.Value));
+                            element.Add(new XAttribute(attribute.Key, attribute.Value));
                     }
                 }
 
@@ -68,10 +68,10 @@ namespace ActLikeAI.Config
                 {
                     if (child.Changed)
                     {
-                        var xmlChild = element.Element(child.Name);
+                        var xmlChild = element.Element(child.Key);
                         if (xmlChild == null)
                         {
-                            xmlChild = new XElement(child.Name);
+                            xmlChild = new XElement(child.Key);
                             element.Add(xmlChild);
                         }
                         UpdateXml(xmlChild, child);

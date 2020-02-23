@@ -8,17 +8,17 @@ namespace ActLikeAI.Config
     {
         public ConfigNode Parent { get; private set; }
 
-        public string Name { get; private set; }
+        public string Key { get; private set; }
 
         public string Value { get; private set; }
 
         public bool Changed { get; set; }
 
 
-        public ConfigAttribute(ConfigNode parent, string name, string value = "")
+        public ConfigAttribute(ConfigNode parent, string key, string value = "")
         {
             Parent = parent;
-            Name = name;
+            Key = key;
             Value = value;
             Changed = false;
         }

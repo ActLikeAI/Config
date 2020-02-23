@@ -18,11 +18,6 @@ namespace GettingStarted
             Console.WriteLine($"Colors.Foreground.B = {Config.Get("Colors.Foreground.B")}");
             Console.WriteLine();
 
-            Console.WriteLine("With optional root node:");
-            Console.WriteLine($"Window.Size.Width = {Config.Get("Window.Size.Width")}");
-            Console.WriteLine($"Window.Colors.Foreground.G = {Config.Get("Window.Colors.Foreground.G")}");
-            Console.WriteLine();
-
             Config.Set("Size.Height", "800");
             Config.Set("Colors.Foreground.R", "128");
 

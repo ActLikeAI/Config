@@ -7,7 +7,7 @@ namespace ActLikeAI.Config
     {
         public ConfigNode Parent { get; private set; }
 
-        public string Name { get; private set; }
+        public string Key { get; private set; }
 
         public string Value { get; private set; }
        
@@ -18,10 +18,10 @@ namespace ActLikeAI.Config
         public List<ConfigAttribute> Attributes { get; } = new List<ConfigAttribute>();
 
 
-        public ConfigNode(ConfigNode parent, string name, string value = "")
+        public ConfigNode(ConfigNode parent, string key, string value = "")
         {
             Parent = parent;
-            Name = name;
+            Key = key;
             Value = value;
             Changed = false;
         }
