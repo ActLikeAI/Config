@@ -15,9 +15,9 @@ namespace ActLikeAI.Config
         {
             ConfigFile.Separator = separator;
             
-            file = new ConfigFile(definitionFile, new XmlConfigProvider());
-            file.AddLocation(saveDirectory, true);
-            file.AddLocation(Directory.GetCurrentDirectory());
+            file = ConfigFile.Load(definitionFile, new XmlConfigProvider())                
+                .AddAppData(saveDirectory, true)               
+                .AddCurrentDirectory();
         }
 
 

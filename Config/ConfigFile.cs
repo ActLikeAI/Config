@@ -5,53 +5,180 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
+
+using static System.Environment;
+
 namespace ActLikeAI.Config
 {
     public class ConfigFile
     {
-        public ConfigFile(string fileName, IConfigProvider provider)
+        /// <summary>
+        /// Private empty constructor.
+        /// </summary>
+        private ConfigFile() { }
+
+
+        /// <summary>
+        /// Loads the config definition file.
+        /// </summary>
+        /// <param name="fileName">File name.</param>
+        /// <param name="provider">Config file format provider.</param>
+        /// <returns>Instance of the ConfigFile class.</returns>
+        public static ConfigFile Load(string fileName, IConfigProvider provider)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Please specify the config definition file.");
 
             if (provider is null)
-                throw new ArgumentNullException("ConfigProvider can't be null.");            
-            
+                throw new ArgumentNullException(nameof(provider));
+
+            var file = new ConfigFile();
+
             if (IsPathAbsolute(fileName))
-                definitionFile = fileName;
+                file.definitionFile = fileName;
             else
             {
                 string callerDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                definitionFile = Path.GetFullPath(Path.Combine(callerDirectory, fileName));
+                file.definitionFile = Path.GetFullPath(Path.Combine(callerDirectory, fileName));
             }
 
-            if (!File.Exists(definitionFile))
-                throw new ArgumentException($"Can't find the definition file: {definitionFile}.");
+            if (!File.Exists(file.definitionFile))
+                throw new ArgumentException($"Can't find the definition file: {file.definitionFile}.");
 
-            configProvider = provider;
-            root = configProvider.Load(definitionFile);
+            file.provider = provider;
+            file.root = file.provider.Load(file.definitionFile);
+
+            return file;
         }
 
-
-        public void AddLocation(string directory, bool save = false)
+       
+        /// <summary>
+        /// Adds a location for config file overlay.
+        /// </summary>
+        /// <param name="directory">Config file overlay location.</param>
+        /// <param name="save">If true, location is marked as save location.</param>
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddLocation(string directory, bool save = false)
         {
             if (string.IsNullOrEmpty(directory))
                 throw new ArgumentException("Please specify the target directory.");
 
             string location = Path.Combine(directory, Path.GetFileName(definitionFile));
-
+            
             if (location != definitionFile && File.Exists(location))
-                UpdateNode(root, configProvider.Load(location));
+                UpdateNode(root, provider.Load(location));
 
-            if (save)
+            if (save)             
                 saveLocation = location;
+
+            return this;
         }
 
 
+        /// <summary>
+        /// Adds the current directory to the list of config file overlays. It's always read-only.
+        /// </summary>      
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddCurrentDirectory()
+            => AddLocation(Directory.GetCurrentDirectory(), false);
+
+
+        /// <summary>
+        /// Adds path relative to user's application data directory to the list of config file overlays.
+        /// </summary>
+        /// <param name="relativePath">Path relative to user's application data directory.</param>
+        /// <param name="save">If true, location is marked as save location.</param>
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddAppData(string relativePath, bool save = false)
+        {
+            if (relativePath is null)
+                throw new ArgumentNullException(nameof(relativePath));
+
+            if (IsPathAbsolute(relativePath))
+                throw new ArgumentException($"{relativePath} must be relative. With absolute paths use AddLocation instead.");
+            else
+                return AddLocation(Path.Combine(GetFolderPath(SpecialFolder.ApplicationData), relativePath), save);
+        }
+
+        /// <summary>
+        /// Adds path relative to user's local application data directory to the list of config file overlays.
+        /// </summary>
+        /// <param name="relativePath">Path relative to user's local application data directory.</param>
+        /// <param name="save">If true, location is marked as save location.</param>
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddLocalAppData(string relativePath, bool save = false)
+        {
+            if (relativePath is null)
+                throw new ArgumentNullException(nameof(relativePath));
+
+            if (IsPathAbsolute(relativePath))
+                throw new ArgumentException($"{relativePath} must be relative. With absolute paths use AddLocation instead.");
+            else
+                return AddLocation(Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), relativePath), save);
+        }
+
+
+        /// <summary>
+        /// Adds path relative to common application data directory to the list of config file overlays.
+        /// </summary>
+        /// <param name="relativePath">Path relative to common application data directory.</param>
+        /// <param name="save">If true, location is marked as save location.</param>
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddCommonAppData(string relativePath, bool save = false)
+        {
+            if (relativePath is null)
+                throw new ArgumentNullException(nameof(relativePath));
+
+            if (IsPathAbsolute(relativePath))
+                throw new ArgumentException($"{relativePath} must be relative. With absolute paths use AddLocation instead.");
+            else
+                return AddLocation(Path.Combine(GetFolderPath(SpecialFolder.CommonApplicationData), relativePath), save);
+        }
+
+
+        /// <summary>
+        /// Adds path relative to user's home directory to the list of config file overlays.
+        /// </summary>
+        /// <param name="relativePath">Path relative to user's home directory.</param>
+        /// <param name="save">If true, location is marked as save location.</param>
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddUserHome(string relativePath, bool save = false)
+        {
+            if (relativePath is null)
+                throw new ArgumentNullException(nameof(relativePath));
+
+            if (IsPathAbsolute(relativePath))
+                throw new ArgumentException($"{relativePath} must be relative. With absolute paths use AddLocation instead.");
+            else
+                return AddLocation(Path.Combine(GetFolderPath(SpecialFolder.CommonApplicationData), relativePath), save);
+        }
+
+
+        /// <summary>
+        /// Adds path relative to user's documents directory to the list of config file overlays.
+        /// </summary>
+        /// <param name="relativePath">Path relative to user's documents directory.</param>
+        /// <param name="save">If true, location is marked as save location.</param>
+        /// <returns>Current instance of the ConfigFile.</returns>
+        public ConfigFile AddMyDocuments(string relativePath, bool save = false)
+        {
+            if (relativePath is null)
+                throw new ArgumentNullException(nameof(relativePath));
+
+            if (IsPathAbsolute(relativePath))
+                throw new ArgumentException($"{relativePath} must be relative. With absolute paths use AddLocation instead.");
+            else
+                return AddLocation(Path.Combine(GetFolderPath(SpecialFolder.Personal), relativePath), save);
+        }
+
+
+        /// <summary>
+        /// Saves the changes to the save location.
+        /// </summary>
         public void Save()
         {
-            if (changed)                            
-                configProvider.Save(root, saveLocation);            
+            if (!string.IsNullOrEmpty(saveLocation) && changed)                            
+                provider.Save(root, saveLocation);            
         }
 
 
@@ -179,7 +306,7 @@ namespace ActLikeAI.Config
         }
 
 
-        private bool IsPathAbsolute(string path) 
+        private static bool IsPathAbsolute(string path) 
             => (Path.GetFullPath(path) == path);
 
 
@@ -187,8 +314,8 @@ namespace ActLikeAI.Config
         private string saveLocation;
         
         private ConfigNode root;
-        private bool changed = false;
-        private readonly IConfigProvider configProvider;
+        private bool changed = false;        
+        private IConfigProvider provider;
 
         public static char Separator { get; set; } = '.';
     }

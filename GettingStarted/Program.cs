@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using ActLikeAI.Config;
 
 namespace GettingStarted
@@ -7,7 +8,7 @@ namespace GettingStarted
     {
         static void Main(string[] args)
         {
-            Config.Load("Sample.cfg", @"ActLikeAI/ConfigTest");
+            Config.Load("Sample.cfg", Path.Combine("ActLikeAI", "ConfigTest"));
 
             Console.WriteLine($"Size.Width = {Config.Get("Size.Width")}");
             Console.WriteLine($"Size.Height = {Config.Get("Size.Height")}");
