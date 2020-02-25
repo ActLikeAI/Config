@@ -6,7 +6,7 @@ namespace ActLikeAI.Config
 {
     public interface IConfigProvider
     {
-        public ConfigNode Load(string file);
-        public void Save(ConfigNode root, string saveLocation);
+        ConfigNode Load(string file);
+        void Save(ConfigNode root, string saveLocation);
     }
 }
