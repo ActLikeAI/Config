@@ -100,6 +100,7 @@ namespace ActLikeAI.Config
                 return AddLocation(Path.Combine(GetFolderPath(SpecialFolder.ApplicationData), relativePath), save);
         }
 
+
         /// <summary>
         /// Adds path relative to user's local application data directory to the list of config file overlays.
         /// </summary>
@@ -182,6 +183,11 @@ namespace ActLikeAI.Config
         }
 
 
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <param name="key">The key of the value to get.</param>
+        /// <returns>Value associated with the specified key.</returns>
         public string Get(string key)
         {
             if (string.IsNullOrEmpty(key))
@@ -223,14 +229,32 @@ namespace ActLikeAI.Config
         }
 
 
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <typeparam name="T">Type of the return value.</typeparam>
+        /// <param name="key">The key of the value to get.</param>
+        /// <param name="formatProvider">Provides formating information for the conversion to type T.</param>
+        /// <returns>Value associated with the specified key converted to type T.</returns>
         public T Get<T>(string key, IFormatProvider formatProvider) 
             => (T)Convert.ChangeType(Get(key), typeof(T), formatProvider);
 
 
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <typeparam name="T">Type of the return value.</typeparam>
+        /// <param name="key">The key of the value to get.</param>
+        /// <returns>Value associated with the specified key converted to type T.</returns>
         public T Get<T>(string key)
             => Get<T>(key, CultureInfo.CurrentCulture);
 
 
+        /// <summary>
+        /// Sets the value of the specified key.
+        /// </summary>
+        /// <param name="key">The key of the value to set.</param>
+        /// <param name="value">Value of the specified key.</param>
         public void Set(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -277,10 +301,23 @@ namespace ActLikeAI.Config
         }
 
 
+        /// <summary>
+        /// Sets the value of the specified key.
+        /// </summary>
+        /// <typeparam name="T">Type of the return value.</typeparam>
+        /// <param name="key">The key of the value to set.</param>
+        /// <param name="value">Value of the specified key.</param>
+        /// <param name="formatProvider">Provides formating information for the conversion to type T.</param>
         public void Set<T>(string key, T value, IFormatProvider formatProvider)
             => Set(key, string.Format(formatProvider, "{0}", value));
 
 
+        /// <summary>
+        /// Sets the value of the specified key.
+        /// </summary>
+        /// <typeparam name="T">Type of the return value.</typeparam>
+        /// <param name="key">The key of the value to set.</param>
+        /// <param name="value">Value of the specified key.</param>
         public void Set<T>(string key, T value)
             => Set<T>(key, value, CultureInfo.CurrentCulture);
 
