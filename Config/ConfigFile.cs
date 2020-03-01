@@ -221,7 +221,7 @@ namespace ActLikeAI.Config
         public void Set(string key, string value)            
         {
             if (value == null)
-                throw new ArgumentNullException($"{nameof(value)} can't be null.");
+                throw new ArgumentNullException(nameof(value));
 
             GetKeyValuePair(key).Update(value);
             changed = true;
