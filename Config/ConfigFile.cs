@@ -189,46 +189,9 @@ namespace ActLikeAI.Config
         /// <param name="key">The key of the value to get.</param>
         /// <returns>Value associated with the specified key.</returns>
         public string Get(string key)
-        {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentException($"{nameof(key)} can't be null or empty.");
+            => GetKeyValuePair(key).Value;
 
-            string[] tokens = key.Split(new char[] { Separator });
-           
-            var current = root;
-            var previous = root;
-            int i = 0;
-            do
-            {
-                previous = current;
-                current = current.Children.Find(node => node.Key == tokens[i]);
-                i++;
-            }
-            while (i < tokens.Length && current != null);
-
-            // This can happen in two scenarios:
-            if (current is null)
-            {
-                // 1. We reached then end of the array and the last token wasn't matched,
-                //    so we try to see whether it's an attribute. If yes, we return its value.
-                if (i == tokens.Length)
-                {
-                    var attribute = previous.Attributes.Find(attr => attr.Key == tokens[i - 1]);
-                    if (attribute != null)
-                        return attribute.Value;
-                    else
-                        throw new ArgumentException($"Attribute {tokens[i - 1]} not found.");
-                }
-                // 2. Token wasn't matched somewhere before the end of the array,
-                //    which means that requested node is not present.
-                else
-                    throw new ArgumentException($"Node {tokens[i]} not found.");
-            }
-            else
-                return current.Value;
-        }
-
-
+       
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>
@@ -255,48 +218,12 @@ namespace ActLikeAI.Config
         /// </summary>
         /// <param name="key">The key of the value to set.</param>
         /// <param name="value">Value of the specified key.</param>
-        public void Set(string key, string value)
+        public void Set(string key, string value)            
         {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentException($"{nameof(key)} can't be null or empty.");
-
             if (value == null)
                 throw new ArgumentNullException($"{nameof(value)} can't be null.");
 
-            string[] tokens = key.Split(new char[] { Separator });
-
-            var current = root;
-            var previous = root;
-            int i = 0;
-            do
-            {
-                previous = current;
-                current = current.Children.Find(node => node.Key == tokens[i]);
-                i++;
-            }
-            while (i < tokens.Length && current != null);
-
-            // This can happen in two scenarios:
-            if (current is null)
-            {
-                // 1. We reached then end of the array and the last token wasn't matched,
-                //    so we try to see whether it's an attribute. If yes, we return its value.
-                if (i == tokens.Length)
-                {
-                    var attribute = previous.Attributes.Find(attr => attr.Key == tokens[i - 1]);
-                    if (attribute != null)
-                        attribute.Update(value);
-                    else
-                        throw new ArgumentException($"Attribute {tokens[i - 1]} not found.");
-                }
-                // 2. Token wasn't matched somewhere before the end of the array,
-                //    which means that requested node is not present.
-                else
-                    throw new ArgumentException($"Node {tokens[i]} not found.");
-            }
-            else
-                current.Update(value);
-
+            GetKeyValuePair(key).Update(value);
             changed = true;
         }
 
@@ -322,6 +249,57 @@ namespace ActLikeAI.Config
             => Set<T>(key, value, CultureInfo.CurrentCulture);
 
 
+        /// <summary>
+        /// Gets the key/value pair that corresponds to the specified key.
+        /// </summary>
+        /// <param name="key">The key of the key/value pair to find.</param>
+        /// <returns>IConfigKeyValuePair instance that corresponds to the specified key.</returns>
+        private IConfigKeyValuePair GetKeyValuePair(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException($"{nameof(key)} can't be null or empty.");
+
+            string[] tokens = key.Split(new char[] { Separator });
+
+            var current = root;
+            var previous = root;
+            int i = 0;
+            do
+            {
+                previous = current;
+                current = current.Children.Find(node => node.Key == tokens[i]);
+                i++;
+            }
+            while (i < tokens.Length && current != null);
+
+            // This can happen in two scenarios:
+            if (current is null)
+            {
+                // 1. We reached then end of the array and the last token wasn't matched,
+                //    so we try to see whether it's an attribute. If yes, we return its value.
+                if (i == tokens.Length)
+                {
+                    var attribute = previous.Attributes.Find(attr => attr.Key == tokens[i - 1]);
+                    if (attribute != null)
+                        return attribute;
+                    else
+                        throw new ArgumentException($"Attribute {tokens[i - 1]} not found.");
+                }
+                // 2. Token wasn't matched somewhere before the end of the array,
+                //    which means that requested node is not present.
+                else
+                    throw new ArgumentException($"Node {tokens[i]} not found.");
+            }
+            else
+                return current;
+        }
+
+
+        /// <summary>
+        /// Updates the config tree with values from another (partial) tree.
+        /// </summary>
+        /// <param name="node">Root of the tree to be updated.</param>
+        /// <param name="update">Root of the tree that contains new values.</param>
         private void UpdateNode(ConfigNode node, ConfigNode update)
         {
             if (node.Value != update.Value)
@@ -343,6 +321,11 @@ namespace ActLikeAI.Config
         }
 
 
+        /// <summary>
+        /// Checks whether the supplied path is absolute.
+        /// </summary>
+        /// <param name="path">Path to be checked.</param>
+        /// <returns>True if path is absolute, false otherwise.</returns>
         private static bool IsPathAbsolute(string path) 
             => (Path.GetFullPath(path) == path);
 
