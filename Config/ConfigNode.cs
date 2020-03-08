@@ -79,7 +79,7 @@ namespace ActLikeAI.Config
         /// <param name="node">Starting node.</param>
         public static void Notify(ConfigNode node)
         {
-            if (node == null)
+            if (node is null)
                 throw new ArgumentNullException(nameof(node));
 
             node.Changed = true;

@@ -15,7 +15,7 @@ namespace ActLikeAI.Config
         {
             ConfigFile.Separator = separator;
             
-            file = ConfigFile.Load(definitionFile, new XmlConfigProvider())                
+            file = new ConfigFile(definitionFile, new XmlConfigProvider())                
                 .AddAppData(saveDirectory, true)               
                 .AddCurrentDirectory();
         }
@@ -29,20 +29,12 @@ namespace ActLikeAI.Config
             => file.Get(key);
 
 
-        public static T Get<T>(string key, IFormatProvider formatProvider) 
-            => file.Get<T>(key, formatProvider);
-
-
-        public static T Get<T>(string key)
+        public static T Get<T>(string key) 
             => file.Get<T>(key);
 
 
         public static void Set(string key, string value) 
             => file.Set(key, value);
-
-
-        public static void Set<T>(string key, T value, IFormatProvider formatProvider) 
-            => file.Set<T>(key, value, formatProvider);
 
 
         public static void Set<T>(string key, T value)

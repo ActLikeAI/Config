@@ -13,43 +13,49 @@ namespace ActLikeAI.Config
     public class ConfigFile
     {
         /// <summary>
-        /// Private empty constructor.
+        /// Initializes a new instance of ConfigFile class.
         /// </summary>
-        private ConfigFile() { }
-
-
-        /// <summary>
-        /// Loads the config definition file.
-        /// </summary>
-        /// <param name="fileName">File name.</param>
-        /// <param name="provider">Config file format provider.</param>
-        /// <returns>Instance of the ConfigFile class.</returns>
-        public static ConfigFile Load(string fileName, IConfigProvider provider)
+        /// <param name="fileName">Location of the definition file.</param>
+        /// <param name="configProvider">Config file format provider.</param>
+        /// <param name="formatProvider">Provides formating information for the conversion is string values to built-in types.</param>
+        public ConfigFile(string fileName, IConfigProvider configProvider, IFormatProvider formatProvider) 
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Please specify the config definition file.");
 
-            if (provider is null)
-                throw new ArgumentNullException(nameof(provider));
+            if (configProvider is null)
+                throw new ArgumentNullException(nameof(configProvider));
 
-            var file = new ConfigFile();
+            if (formatProvider is null)
+                throw new ArgumentNullException(nameof(formatProvider));
 
             if (IsPathAbsolute(fileName))
-                file.definitionFile = fileName;
+                definitionFile = fileName;
             else
             {
                 string callerDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                file.definitionFile = Path.GetFullPath(Path.Combine(callerDirectory, fileName));
+                definitionFile = Path.GetFullPath(Path.Combine(callerDirectory, fileName));
             }
 
-            if (!File.Exists(file.definitionFile))
-                throw new ArgumentException($"Can't find the definition file: {file.definitionFile}.");
+            if (!File.Exists(definitionFile))
+                throw new ArgumentException($"Can't find the definition file: {definitionFile}.");
 
-            file.provider = provider;
-            file.root = file.provider.Load(file.definitionFile);
+            this.configProvider = configProvider;
+            root = configProvider.Load(definitionFile);
 
-            return file;
+            this.formatProvider = formatProvider;
         }
+
+
+        /// <summary>
+        /// Initializes a new instance of ConfigFile class.
+        /// </summary>
+        /// <param name="fileName">Location of the definition file.</param>
+        /// <param name="configProvider">Config file format provider.</param>
+        public ConfigFile(string fileName, IConfigProvider configProvider) :
+            this(fileName, configProvider, CultureInfo.InvariantCulture)
+        { }
+
 
        
         /// <summary>
@@ -66,7 +72,7 @@ namespace ActLikeAI.Config
             string location = Path.Combine(directory, Path.GetFileName(definitionFile));
             
             if (location != definitionFile && File.Exists(location))
-                UpdateNode(root, provider.Load(location));
+                UpdateNode(root, configProvider.Load(location));
 
             if (save)             
                 saveLocation = location;
@@ -179,7 +185,7 @@ namespace ActLikeAI.Config
         public void Save()
         {
             if (!string.IsNullOrEmpty(saveLocation) && changed)                            
-                provider.Save(root, saveLocation);            
+                configProvider.Save(root, saveLocation);            
         }
 
 
@@ -197,20 +203,9 @@ namespace ActLikeAI.Config
         /// </summary>
         /// <typeparam name="T">Type of the return value.</typeparam>
         /// <param name="key">The key of the value to get.</param>
-        /// <param name="formatProvider">Provides formating information for the conversion to type T.</param>
         /// <returns>Value associated with the specified key converted to type T.</returns>
-        public T Get<T>(string key, IFormatProvider formatProvider) 
+        public T Get<T>(string key) 
             => (T)Convert.ChangeType(Get(key), typeof(T), formatProvider);
-
-
-        /// <summary>
-        /// Gets the value associated with the specified key.
-        /// </summary>
-        /// <typeparam name="T">Type of the return value.</typeparam>
-        /// <param name="key">The key of the value to get.</param>
-        /// <returns>Value associated with the specified key converted to type T.</returns>
-        public T Get<T>(string key)
-            => Get<T>(key, CultureInfo.CurrentCulture);
 
 
         /// <summary>
@@ -220,7 +215,7 @@ namespace ActLikeAI.Config
         /// <param name="value">Value of the specified key.</param>
         public void Set(string key, string value)            
         {
-            if (value == null)
+            if (value is null)
                 throw new ArgumentNullException(nameof(value));
 
             GetKeyValuePair(key).Update(value);
@@ -234,19 +229,8 @@ namespace ActLikeAI.Config
         /// <typeparam name="T">Type of the return value.</typeparam>
         /// <param name="key">The key of the value to set.</param>
         /// <param name="value">Value of the specified key.</param>
-        /// <param name="formatProvider">Provides formating information for the conversion to type T.</param>
-        public void Set<T>(string key, T value, IFormatProvider formatProvider)
-            => Set(key, string.Format(formatProvider, "{0}", value));
-
-
-        /// <summary>
-        /// Sets the value of the specified key.
-        /// </summary>
-        /// <typeparam name="T">Type of the return value.</typeparam>
-        /// <param name="key">The key of the value to set.</param>
-        /// <param name="value">Value of the specified key.</param>
         public void Set<T>(string key, T value)
-            => Set<T>(key, value, CultureInfo.CurrentCulture);
+            => Set(key, string.Format(formatProvider, "{0}", value));
 
 
         /// <summary>
@@ -335,7 +319,8 @@ namespace ActLikeAI.Config
         
         private ConfigNode root;
         private bool changed = false;        
-        private IConfigProvider provider;
+        private IConfigProvider configProvider;
+        private IFormatProvider formatProvider;
 
         public static char Separator { get; set; } = '.';
     }

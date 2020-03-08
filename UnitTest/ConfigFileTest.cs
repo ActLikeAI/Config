@@ -6,12 +6,12 @@ namespace ActLikeAI.Config.UnitTest
     public class ConfigFileTest
     {
         private ConfigFile config;
-        
-        
+
+                
         [TestInitialize]
         public void Initialize()
         {
-            config = ConfigFile.Load(@"Editor.cfg", new XmlConfigProvider());
+            config = new ConfigFile(@"Editor.cfg", new XmlConfigProvider());
         }
 
 
@@ -63,7 +63,7 @@ namespace ActLikeAI.Config.UnitTest
         public void SetAsInt()
         {
             Assert.AreEqual("480", config.Get("MainWindow.Size.Height"));
-            config.Set("MainWindow.Size.Height", "768");
+            config.Set("MainWindow.Size.Height", 768);
             Assert.AreEqual("768", config.Get("MainWindow.Size.Height"));
         }
     }

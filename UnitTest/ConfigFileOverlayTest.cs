@@ -35,7 +35,7 @@ namespace ActLikeAI.Config.UnitTest
             }
             
 
-            config = ConfigFile.Load("Editor.cfg", new XmlConfigProvider())
+            config = new ConfigFile("Editor.cfg", new XmlConfigProvider())
                         .AddLocation(tempDir, true);
         }
 
@@ -72,7 +72,7 @@ namespace ActLikeAI.Config.UnitTest
             config.Set("MainWindow.Colors.Foreground.B", "11");
             config.Save();
 
-            config = ConfigFile.Load("Editor.cfg", new XmlConfigProvider())
+            config = new ConfigFile("Editor.cfg", new XmlConfigProvider())
                         .AddLocation(tempDir);
 
             Assert.AreEqual("11", config.Get("MainWindow.Colors.Foreground.B"));
