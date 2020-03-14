@@ -57,7 +57,14 @@ namespace ActLikeAI.Config
         { }
 
 
-       
+
+        /// <summary>
+        /// Gets the key of the root node.
+        /// </summary>
+        public string RootKey => root.Key;
+
+
+
         /// <summary>
         /// Adds a location for config file overlay.
         /// </summary>
@@ -234,6 +241,12 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
+        /// Key separator.
+        /// </summary>
+        public static char Separator { get; set; } = '.';
+
+
+        /// <summary>
         /// Gets the key/value pair that corresponds to the specified key.
         /// </summary>
         /// <param name="key">The key of the key/value pair to find.</param>
@@ -321,7 +334,5 @@ namespace ActLikeAI.Config
         private bool changed = false;        
         private IConfigProvider configProvider;
         private IFormatProvider formatProvider;
-
-        public static char Separator { get; set; } = '.';
     }
 }
