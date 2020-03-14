@@ -26,7 +26,7 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Saves all configuration files.
+        /// Saves changed configuration files.
         /// </summary>
         public void Save()
         {
