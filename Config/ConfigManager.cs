@@ -30,13 +30,23 @@ namespace ActLikeAI.Config
         /// </summary>
         /// <param name="file">Configuration file to add.</param>
         /// <returns>This instance of the ConfigManager.</returns>
-        public ConfigManager AddFile(ConfigFile file)
+        public ConfigManager Add(ConfigFile file)
         {
             if (file == null)
                 throw new ArgumentNullException(nameof(file));
 
             files.Add(file.RootKey, file);
             return this;
+        }
+
+
+        /// <summary>
+        /// Saves all configuration files.
+        /// </summary>
+        public void Save()
+        {
+            foreach (var file in files.Values)
+                file.Save();
         }
 
 
@@ -92,6 +102,9 @@ namespace ActLikeAI.Config
 
         private (ConfigFile File, string Key) SplitKey(string key)
         {
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException($"{nameof(key)} can't be null or empty.");
+
             int pos = key.IndexOf(Separator);
             if (pos > 0)
             {

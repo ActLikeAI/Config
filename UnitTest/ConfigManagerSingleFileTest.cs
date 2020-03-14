@@ -14,7 +14,7 @@ namespace ActLikeAI.Config.UnitTest
         public void Initialize()
         {
             manager = new ConfigManager()
-                .AddFile(new ConfigFile(@"Editor.cfg", new XmlConfigProvider()));
+                .Add(new ConfigFile(@"Editor.cfg", new XmlConfigProvider()));
         }
 
 

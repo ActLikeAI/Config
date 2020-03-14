@@ -20,8 +20,8 @@ namespace ActLikeAI.Config.UnitTest
             var model = new ConfigFile("Model.cfg", provider);
 
             manager = new ConfigManager()
-                .AddFile(editor)
-                .AddFile(model);
+                .Add(editor)
+                .Add(model);
         }
 
         [TestMethod]
