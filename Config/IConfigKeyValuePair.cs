@@ -14,6 +14,7 @@ namespace ActLikeAI.Config
         /// </summary>
         string Key { get; }
 
+
         /// <summary>
         /// Gets the value in the key/value pair.
         /// </summary>

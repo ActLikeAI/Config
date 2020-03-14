@@ -57,12 +57,10 @@ namespace ActLikeAI.Config
         { }
 
 
-
         /// <summary>
         /// Gets the key of the root node.
         /// </summary>
         public string RootKey => root.Key;
-
 
 
         /// <summary>

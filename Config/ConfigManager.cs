@@ -52,7 +52,6 @@ namespace ActLikeAI.Config
         }
 
 
-
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>
@@ -64,6 +63,7 @@ namespace ActLikeAI.Config
             var split = SplitKey(key);
             return split.File.Get<T>(split.Key);
         }
+
 
         /// <summary>
         /// Sets the value of the specified key.

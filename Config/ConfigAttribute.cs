@@ -33,7 +33,6 @@ namespace ActLikeAI.Config
         public bool Changed { get; private set; }
 
 
-
         /// <summary>
         /// Initializes a new instance of ConfigAttribute class.
         /// </summary>
