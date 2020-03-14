@@ -14,14 +14,9 @@ namespace ActLikeAI.Config.UnitTest
         [TestInitialize]
         public void Initialize()
         {
-            var provider = new XmlConfigProvider();
-
-            var editor = new ConfigFile("Editor.cfg", provider);
-            var model = new ConfigFile("Model.cfg", provider);
-
             manager = new ConfigManager()
-                .Add(editor)
-                .Add(model);
+                .Add(new ConfigFile("Editor.cfg"))
+                .Add(new ConfigFile("Model.cfg"));
         }
 
         [TestMethod]

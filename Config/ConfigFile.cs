@@ -58,6 +58,25 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
+        /// Initializes a new instance of ConfigFile class.
+        /// </summary>
+        /// <param name="fileName">Location of the definition file.</param>
+        /// <param name="formatProvider">Provides formating information for the conversion is string values to built-in types.</param>
+        public ConfigFile(string fileName, IFormatProvider formatProvider) :
+            this(fileName, new XmlConfigProvider(), formatProvider)
+        { }
+
+
+        /// <summary>
+        /// Initializes a new instance of ConfigFile class.
+        /// </summary>
+        /// <param name="fileName">Location of the definition file.</param>
+        public ConfigFile(string fileName) :
+            this(fileName, new XmlConfigProvider(), CultureInfo.InvariantCulture)
+        { }
+
+
+        /// <summary>
         /// Gets the key of the root node.
         /// </summary>
         public string RootKey => root.Key;
