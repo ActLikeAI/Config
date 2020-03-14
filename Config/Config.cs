@@ -9,10 +9,10 @@ namespace ActLikeAI.Config
     public static class Config
     {
 
-        public static void Load(string definitionFile, string saveDirectory, char separator = '.')
+        public static void Load(string definitionFile, string saveDirectory)
         {
             if (manager is null)
-                manager = new ConfigManager(separator);
+                manager = new ConfigManager();
 
             var file = new ConfigFile(definitionFile, new XmlConfigProvider())
                 .AddAppData(saveDirectory, true)
@@ -22,10 +22,10 @@ namespace ActLikeAI.Config
         }
 
 
-        public static void Load(ConfigFile file, char separator = '.')
+        public static void Load(ConfigFile file)
         {
             if (manager is null)
-                manager = new ConfigManager(separator);
+                manager = new ConfigManager();
 
             manager.Add(file);
         }

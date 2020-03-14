@@ -64,6 +64,12 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
+        /// Key separator.
+        /// </summary>
+        public static char Separator => '.';
+
+
+        /// <summary>
         /// Adds a location for config file overlay.
         /// </summary>
         /// <param name="directory">Config file overlay location.</param>
@@ -237,13 +243,7 @@ namespace ActLikeAI.Config
         public void Set<T>(string key, T value)
             => Set(key, string.Format(formatProvider, "{0}", value));
 
-
-        /// <summary>
-        /// Key separator.
-        /// </summary>
-        public static char Separator { get; set; } = '.';
-
-
+       
         /// <summary>
         /// Gets the key/value pair that corresponds to the specified key.
         /// </summary>

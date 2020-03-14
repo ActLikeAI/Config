@@ -11,21 +11,6 @@ namespace ActLikeAI.Config
     public class ConfigManager
     {
         /// <summary>
-        /// Initializes the ConfigManager class.
-        /// </summary>
-        public ConfigManager(char separator = '.')
-        {
-            Separator = ConfigFile.Separator = separator;            
-        }
-
-
-        /// <summary>
-        /// Key separator.
-        /// </summary>
-        public char Separator { get; private set; }
-
-
-        /// <summary>
         /// Adds a configuration file to the manager.
         /// </summary>
         /// <param name="file">Configuration file to add.</param>
@@ -105,7 +90,7 @@ namespace ActLikeAI.Config
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentException($"{nameof(key)} can't be null or empty.");
 
-            int pos = key.IndexOf(Separator);
+            int pos = key.IndexOf(ConfigFile.Separator);
             if (pos > 0)
             {
                 string filePart = key.Substring(0, pos);
