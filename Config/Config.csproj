@@ -5,11 +5,19 @@
     <AssemblyName>ActLikeAI.Config</AssemblyName>
     <RootNamespace>ActLikeAI.Config</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <Authors>Atila Čeki</Authors>
-    <Description>App configuration library for .Net Core.</Description>
+    <Description>App configuration library for .Net Standard 2.0.</Description>
     <Copyright>Copyright (c) 2020 Atila Čeki. All rights reserved.</Copyright>
-    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Company>ActLikeAI</Company>
+    <RepositoryUrl>https://github.com/ActLikeAI/Config.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/ActLikeAI/Config/</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>configuration xml</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +25,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
