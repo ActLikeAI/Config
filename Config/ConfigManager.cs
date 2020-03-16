@@ -6,7 +6,7 @@ using System.Linq;
 namespace ActLikeAI.Config
 {
     /// <summary>
-    /// Represents a collection of configuration files.
+    /// Represents class that manages a collection of configuration files.
     /// </summary>
     public class ConfigManager
     {

@@ -17,7 +17,11 @@
     <RepositoryUrl>https://github.com/ActLikeAI/Config.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ActLikeAI/Config/</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>configuration xml</PackageTags>
+    <PackageTags>configuration xml</PackageTags>   
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>ActLikeAI.Config.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

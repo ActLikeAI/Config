@@ -210,7 +210,7 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Saves the changes to the save location.
+        /// Saves changed values to the save location.
         /// </summary>
         public void Save()
         {

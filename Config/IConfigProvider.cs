@@ -18,7 +18,7 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Save the config file.
+        /// Saves the config file.
         /// </summary>
         /// <param name="root">Root node of the config tree to save.</param>
         /// <param name="saveLocation">Full path to the location where to save the file.</param>

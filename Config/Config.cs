@@ -7,12 +7,12 @@ using System.Globalization;
 namespace ActLikeAI.Config
 {
     /// <summary>
-    /// 
+    /// Represents a static wrapper aroung ConfigManager class.
     /// </summary>
     public static class Config
     {
         /// <summary>
-        /// Loads XML definition file and specifies save directory relative user's AppData.
+        /// Loads an XML definition file and specifies save directory relative to user's AppData.
         /// </summary>
         /// <param name="definitionFile">Definition file name.</param>
         /// <param name="saveDirectory">Folder relative to user's AddData.</param>
@@ -78,21 +78,15 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public static void Set<T>(string key, T value)
-            => manager.Set<T>(key, value);
-
-
-        /// <summary>
         /// Sets the value of the specified key.
         /// </summary>
         /// <typeparam name="T">Type of the return value.</typeparam>
         /// <param name="key">The key of the value to set.</param>
         /// <param name="value">Value of the specified key.</param>
+        public static void Set<T>(string key, T value)
+            => manager.Set<T>(key, value);
+
+
         private static ConfigManager manager;
     }
 }
