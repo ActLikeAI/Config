@@ -10,15 +10,19 @@ using static System.Environment;
 
 namespace ActLikeAI.Config
 {
+    /// <summary>
+    /// Represents single configuration file.
+    /// </summary>
     public class ConfigFile
     {
         /// <summary>
-        /// Initializes a new instance of ConfigFile class.
+        /// Initializes a new instance of <see cref="ConfigFile"/> class.
         /// </summary>
         /// <param name="fileName">Location of the definition file.</param>
         /// <param name="configProvider">Config file format provider.</param>
-        /// <param name="formatProvider">Provides formating information for the conversion is string values to built-in types.</param>
-        public ConfigFile(string fileName, IConfigProvider configProvider, IFormatProvider formatProvider) 
+        /// <param name="cultureInfo"><see cref="CultureInfo"/> instance to use for conversion between strings and build-in types.</param>
+        /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
+        public ConfigFile(string fileName, IConfigProvider configProvider, CultureInfo cultureInfo, bool ignoreCase = true) 
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentException("Please specify the config definition file.");
@@ -26,8 +30,8 @@ namespace ActLikeAI.Config
             if (configProvider is null)
                 throw new ArgumentNullException(nameof(configProvider));
 
-            if (formatProvider is null)
-                throw new ArgumentNullException(nameof(formatProvider));
+            if (cultureInfo is null)
+                throw new ArgumentNullException(nameof(cultureInfo));
 
             if (IsPathAbsolute(fileName))
                 definitionFile = fileName;
@@ -43,7 +47,8 @@ namespace ActLikeAI.Config
             this.configProvider = configProvider;
             root = configProvider.Load(definitionFile);
 
-            this.formatProvider = formatProvider;
+            this.cultureInfo = cultureInfo;
+            this.ignoreCase = ignoreCase;
         }
 
 
@@ -51,9 +56,21 @@ namespace ActLikeAI.Config
         /// Initializes a new instance of ConfigFile class.
         /// </summary>
         /// <param name="fileName">Location of the definition file.</param>
-        /// <param name="configProvider">Config file format provider.</param>
-        public ConfigFile(string fileName, IConfigProvider configProvider) :
-            this(fileName, configProvider, CultureInfo.InvariantCulture)
+        /// <param name="configProvider">Config file format provider.</param>      
+        /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
+        public ConfigFile(string fileName, IConfigProvider configProvider, bool ignoreCase = true) :
+            this(fileName, configProvider, CultureInfo.InvariantCulture, ignoreCase)
+        { }
+
+
+        /// <summary>
+        /// Initializes a new instance of ConfigFile class.
+        /// </summary>
+        /// <param name="fileName">Location of the definition file.</param>        
+        /// <param name="cultureInfo">CultureInfo instance to use for conversion between strings and build-in types.</param>
+        /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
+        public ConfigFile(string fileName, CultureInfo cultureInfo, bool ignoreCase = true) :
+            this(fileName, new XmlConfigProvider(), cultureInfo, ignoreCase)
         { }
 
 
@@ -61,18 +78,9 @@ namespace ActLikeAI.Config
         /// Initializes a new instance of ConfigFile class.
         /// </summary>
         /// <param name="fileName">Location of the definition file.</param>
-        /// <param name="formatProvider">Provides formating information for the conversion is string values to built-in types.</param>
-        public ConfigFile(string fileName, IFormatProvider formatProvider) :
-            this(fileName, new XmlConfigProvider(), formatProvider)
-        { }
-
-
-        /// <summary>
-        /// Initializes a new instance of ConfigFile class.
-        /// </summary>
-        /// <param name="fileName">Location of the definition file.</param>
-        public ConfigFile(string fileName) :
-            this(fileName, new XmlConfigProvider(), CultureInfo.InvariantCulture)
+        /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
+        public ConfigFile(string fileName, bool ignoreCase = true) :
+            this(fileName, new XmlConfigProvider(), CultureInfo.InvariantCulture, ignoreCase)
         { }
 
 
@@ -235,7 +243,7 @@ namespace ActLikeAI.Config
         /// <param name="key">The key of the value to get.</param>
         /// <returns>Value associated with the specified key converted to type T.</returns>
         public T Get<T>(string key) 
-            => (T)Convert.ChangeType(Get(key), typeof(T), formatProvider);
+            => (T)Convert.ChangeType(Get(key), typeof(T), cultureInfo);
 
 
         /// <summary>
@@ -260,7 +268,7 @@ namespace ActLikeAI.Config
         /// <param name="key">The key of the value to set.</param>
         /// <param name="value">Value of the specified key.</param>
         public void Set<T>(string key, T value)
-            => Set(key, string.Format(formatProvider, "{0}", value));
+            => Set(key, string.Format(cultureInfo, "{0}", value));
 
        
         /// <summary>
@@ -281,7 +289,7 @@ namespace ActLikeAI.Config
             do
             {
                 previous = current;
-                current = current.Children.Find(node => node.Key == tokens[i]);
+                current = current.Children.Find(node => string.Compare(node.Key,tokens[i], ignoreCase, cultureInfo) == 0);
                 i++;
             }
             while (i < tokens.Length && current != null);
@@ -293,7 +301,7 @@ namespace ActLikeAI.Config
                 //    so we try to see whether it's an attribute. If yes, we return its value.
                 if (i == tokens.Length)
                 {
-                    var attribute = previous.Attributes.Find(attr => attr.Key == tokens[i - 1]);
+                    var attribute = previous.Attributes.Find(attr => string.Compare(attr.Key, tokens[i - 1], ignoreCase, cultureInfo) == 0);
                     if (attribute != null)
                         return attribute;
                     else
@@ -350,6 +358,7 @@ namespace ActLikeAI.Config
         private ConfigNode root;
         private bool changed = false;        
         private IConfigProvider configProvider;
-        private IFormatProvider formatProvider;
+        private CultureInfo cultureInfo;
+        private bool ignoreCase;
     }
 }

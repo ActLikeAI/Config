@@ -28,6 +28,7 @@ bld/
 [Ll]og/
 [Bb]inary/
 [Tt]emp/
+Config/ActLikeAI.Config.xml
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

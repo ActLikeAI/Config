@@ -26,13 +26,15 @@ namespace ActLikeAI.Config.UnitTest
         public void GetNestedOption()
         {
             Assert.AreEqual("640", config.Get("MainWindow.Size.Width"));
+            Assert.AreEqual("480", config.Get("mainwindow.size.height"));
         }
 
 
         [TestMethod]
         public void GetAttribute()
         {
-            Assert.AreEqual("215", config.Get("MainWindow.Colors.Foreground.G"));            
+            Assert.AreEqual("215", config.Get("MainWindow.Colors.Foreground.G"));
+            Assert.AreEqual("0", config.Get("mainwindow.cOlOrs.foreGround.b"));
         }
 
 
@@ -56,6 +58,10 @@ namespace ActLikeAI.Config.UnitTest
             Assert.AreEqual("640", config.Get("MainWindow.Size.Width"));
             config.Set("MainWindow.Size.Width", "768");
             Assert.AreEqual("768", config.Get("MainWindow.Size.Width"));
+
+            Assert.AreEqual("480", config.Get("MainWindoW.SiZe.HeiGht"));
+            config.Set("mainwindow.size.height", "320");
+            Assert.AreEqual("320", config.Get("MainWindow.Size.Height"));
         }
 
 
