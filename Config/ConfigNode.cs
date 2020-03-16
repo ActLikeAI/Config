@@ -9,7 +9,7 @@ namespace ActLikeAI.Config
     public class ConfigNode : IConfigKeyValuePair
     {
         /// <summary>
-        /// Parent of the node. It's null for the root node.
+        /// Parent of the node. It's <see langword="null"/> for the root node.
         /// </summary>
         public ConfigNode Parent { get; private set; }
 

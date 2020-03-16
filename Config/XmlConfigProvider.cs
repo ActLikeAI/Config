@@ -7,15 +7,15 @@ using System.Xml.Linq;
 namespace ActLikeAI.Config
 {
     /// <summary>
-    /// Represents an XML config file format.
+    /// Represents an XML configuration file format.
     /// </summary>
     public class XmlConfigProvider : IConfigProvider
     {
         /// <summary>
-        /// Loads a config file.
+        /// Loads an XML configuration file.
         /// </summary>
         /// <param name="file">File to load.</param>
-        /// <returns>Root node of the loaded config tree.</returns>
+        /// <returns>Root node of the loaded configuration tree.</returns>
         public ConfigNode Load(string file)
         {
             XElement rootXml = XElement.Load(file);
@@ -24,12 +24,15 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Saves the config file.
+        /// Saves the configuration file.
         /// </summary>
-        /// <param name="root">Root node of the config tree to save.</param>
+        /// <param name="root">Root node of the configuration tree to save.</param>
         /// <param name="saveLocation">Full path to the location where to save the file.</param>
         public void Save(ConfigNode root, string saveLocation)
         {
+            if (root is null)
+                throw new ArgumentNullException(nameof(root));
+            
             var xmlRoot = File.Exists(saveLocation) ? XElement.Load(saveLocation) : new XElement(root.Key);
             UpdateXml(xmlRoot, root);
 

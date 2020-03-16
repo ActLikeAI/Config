@@ -18,14 +18,14 @@ namespace ActLikeAI.Config
         /// <summary>
         /// Initializes a new instance of <see cref="ConfigFile"/> class.
         /// </summary>
-        /// <param name="fileName">Location of the definition file.</param>
-        /// <param name="configProvider">Config file format provider.</param>
+        /// <param name="definitionFile">Definition file name.</param>
+        /// <param name="configProvider">Configuration file format provider.</param>
         /// <param name="cultureInfo"><see cref="CultureInfo"/> instance to use for conversion between strings and build-in types.</param>
         /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
-        public ConfigFile(string fileName, IConfigProvider configProvider, CultureInfo cultureInfo, bool ignoreCase = true) 
+        public ConfigFile(string definitionFile, IConfigProvider configProvider, CultureInfo cultureInfo, bool ignoreCase = true) 
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentException("Please specify the config definition file.");
+            if (string.IsNullOrEmpty(definitionFile))
+                throw new ArgumentException("Please specify the configuration definition file.");
 
             if (configProvider is null)
                 throw new ArgumentNullException(nameof(configProvider));
@@ -33,19 +33,19 @@ namespace ActLikeAI.Config
             if (cultureInfo is null)
                 throw new ArgumentNullException(nameof(cultureInfo));
 
-            if (IsPathAbsolute(fileName))
-                definitionFile = fileName;
+            if (IsPathAbsolute(definitionFile))
+                this.definitionFile = definitionFile;
             else
             {
                 string callerDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                definitionFile = Path.GetFullPath(Path.Combine(callerDirectory, fileName));
+                this.definitionFile = Path.GetFullPath(Path.Combine(callerDirectory, definitionFile));
             }
 
-            if (!File.Exists(definitionFile))
-                throw new ArgumentException($"Can't find the definition file: {definitionFile}.");
+            if (!File.Exists(this.definitionFile))
+                throw new ArgumentException($"Can't find the definition file: {this.definitionFile}.");
 
             this.configProvider = configProvider;
-            root = configProvider.Load(definitionFile);
+            root = configProvider.Load(this.definitionFile);
 
             this.cultureInfo = cultureInfo;
             this.ignoreCase = ignoreCase;
@@ -53,34 +53,34 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Initializes a new instance of ConfigFile class.
+        /// Initializes a new instance of <see cref="ConfigFile"/> class.
         /// </summary>
-        /// <param name="fileName">Location of the definition file.</param>
-        /// <param name="configProvider">Config file format provider.</param>      
+        /// <param name="definitionFile">Definition file name.</param>
+        /// <param name="configProvider">Configuration file format provider.</param>
         /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
-        public ConfigFile(string fileName, IConfigProvider configProvider, bool ignoreCase = true) :
-            this(fileName, configProvider, CultureInfo.InvariantCulture, ignoreCase)
+        public ConfigFile(string definitionFile, IConfigProvider configProvider, bool ignoreCase = true) :
+            this(definitionFile, configProvider, CultureInfo.InvariantCulture, ignoreCase)
         { }
 
 
         /// <summary>
         /// Initializes a new instance of ConfigFile class.
         /// </summary>
-        /// <param name="fileName">Location of the definition file.</param>        
+        /// <param name="definitionFile">Definition file name.</param>
         /// <param name="cultureInfo">CultureInfo instance to use for conversion between strings and build-in types.</param>
         /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
-        public ConfigFile(string fileName, CultureInfo cultureInfo, bool ignoreCase = true) :
-            this(fileName, new XmlConfigProvider(), cultureInfo, ignoreCase)
+        public ConfigFile(string definitionFile, CultureInfo cultureInfo, bool ignoreCase = true) :
+            this(definitionFile, new XmlConfigProvider(), cultureInfo, ignoreCase)
         { }
 
 
         /// <summary>
         /// Initializes a new instance of ConfigFile class.
         /// </summary>
-        /// <param name="fileName">Location of the definition file.</param>
+        /// <param name="definitionFile">Definition file name.</param>
         /// <param name="ignoreCase"><see langword="true"/> to ignore case during the comparison; otherwise, <see langword="false"/>.</param>
-        public ConfigFile(string fileName, bool ignoreCase = true) :
-            this(fileName, new XmlConfigProvider(), CultureInfo.InvariantCulture, ignoreCase)
+        public ConfigFile(string definitionFile, bool ignoreCase = true) :
+            this(definitionFile, new XmlConfigProvider(), CultureInfo.InvariantCulture, ignoreCase)
         { }
 
 
@@ -97,11 +97,11 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Adds a location for config file overlay.
+        /// Adds a location for configuration file overlay.
         /// </summary>
-        /// <param name="directory">Config file overlay location.</param>
-        /// <param name="save">If true, location is marked as save location.</param>
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <param name="directory">Configuration file overlay location.</param>
+        /// <param name="save">If <see langword="true"/>, location is marked as save location; otherwise, it's read-only.</param>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddLocation(string directory, bool save = false)
         {
             if (string.IsNullOrEmpty(directory))
@@ -120,19 +120,19 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Adds the current directory to the list of config file overlays. It's always read-only.
+        /// Adds the current directory to the list of configuration file overlays. It's always read-only.
         /// </summary>      
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddCurrentDirectory()
             => AddLocation(Directory.GetCurrentDirectory(), false);
 
 
         /// <summary>
-        /// Adds path relative to user's application data directory to the list of config file overlays.
+        /// Adds path relative to user's application data directory to the list of configuration file overlays.
         /// </summary>
         /// <param name="relativePath">Path relative to user's application data directory.</param>
-        /// <param name="save">If true, location is marked as save location.</param>
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <param name="save">If <see langword="true"/>, location is marked as save location; otherwise, it's read-only.</param>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddAppData(string relativePath, bool save = false)
         {
             if (relativePath is null)
@@ -146,11 +146,11 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Adds path relative to user's local application data directory to the list of config file overlays.
+        /// Adds path relative to user's local application data directory to the list of configuration file overlays.
         /// </summary>
         /// <param name="relativePath">Path relative to user's local application data directory.</param>
-        /// <param name="save">If true, location is marked as save location.</param>
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <param name="save">If <see langword="true"/>, location is marked as save location; otherwise, it's read-only.</param>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddLocalAppData(string relativePath, bool save = false)
         {
             if (relativePath is null)
@@ -164,11 +164,11 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Adds path relative to common application data directory to the list of config file overlays.
+        /// Adds path relative to common application data directory to the list of configuration file overlays.
         /// </summary>
         /// <param name="relativePath">Path relative to common application data directory.</param>
-        /// <param name="save">If true, location is marked as save location.</param>
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <param name="save">If <see langword="true"/>, location is marked as save location; otherwise, it's read-only.</param>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddCommonAppData(string relativePath, bool save = false)
         {
             if (relativePath is null)
@@ -182,11 +182,11 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Adds path relative to user's home directory to the list of config file overlays.
+        /// Adds path relative to user's home directory to the list of configuration file overlays.
         /// </summary>
         /// <param name="relativePath">Path relative to user's home directory.</param>
-        /// <param name="save">If true, location is marked as save location.</param>
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <param name="save">If <see langword="true"/>, location is marked as save location; otherwise, it's read-only.</param>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddUserHome(string relativePath, bool save = false)
         {
             if (relativePath is null)
@@ -200,11 +200,11 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Adds path relative to user's documents directory to the list of config file overlays.
+        /// Adds path relative to user's documents directory to the list of configuration file overlays.
         /// </summary>
         /// <param name="relativePath">Path relative to user's documents directory.</param>
-        /// <param name="save">If true, location is marked as save location.</param>
-        /// <returns>Current instance of the ConfigFile.</returns>
+        /// <param name="save">If <see langword="true"/>, location is marked as save location; otherwise, it's read-only.</param>
+        /// <returns>Current instance of the <see cref="ConfigFile"/>.</returns>
         public ConfigFile AddMyDocuments(string relativePath, bool save = false)
         {
             if (relativePath is null)
@@ -241,7 +241,7 @@ namespace ActLikeAI.Config
         /// </summary>
         /// <typeparam name="T">Type of the return value.</typeparam>
         /// <param name="key">The key of the value to get.</param>
-        /// <returns>Value associated with the specified key converted to type T.</returns>
+        /// <returns>Value associated with the specified key converted to type <typeparamref name="T"/>.</returns>
         public T Get<T>(string key) 
             => (T)Convert.ChangeType(Get(key), typeof(T), cultureInfo);
 
@@ -275,7 +275,7 @@ namespace ActLikeAI.Config
         /// Gets the key/value pair that corresponds to the specified key.
         /// </summary>
         /// <param name="key">The key of the key/value pair to find.</param>
-        /// <returns>IConfigKeyValuePair instance that corresponds to the specified key.</returns>
+        /// <returns><see cref="IConfigKeyValuePair"/> instance that corresponds to the specified key.</returns>
         private IConfigKeyValuePair GetKeyValuePair(string key)
         {
             if (string.IsNullOrEmpty(key))
@@ -318,7 +318,7 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Updates the config tree with values from another (partial) tree.
+        /// Updates the configuration tree with values from another (partial) tree.
         /// </summary>
         /// <param name="node">Root of the tree to be updated.</param>
         /// <param name="update">Root of the tree that contains new values.</param>
@@ -347,7 +347,7 @@ namespace ActLikeAI.Config
         /// Checks whether the supplied path is absolute.
         /// </summary>
         /// <param name="path">Path to be checked.</param>
-        /// <returns>True if path is absolute, false otherwise.</returns>
+        /// <returns><see langword="true"/> if path is absolute; otherwise <see langword="false"/>.</returns>
         private static bool IsPathAbsolute(string path) 
             => (Path.GetFullPath(path) == path);
 

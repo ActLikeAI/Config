@@ -34,10 +34,10 @@ namespace ActLikeAI.Config
 
 
         /// <summary>
-        /// Initializes a new instance of ConfigAttribute class.
+        /// Initializes a new instance of <see cref="ConfigAttribute"/> class.
         /// </summary>
         /// <param name="parent">Parent node of the attribute.</param>
-        /// <param name="key">Name of the attribute.</param>
+        /// <param name="key">Key of the attribute.</param>
         /// <param name="value">Value of the attribute.</param>
         public ConfigAttribute(ConfigNode parent, string key, string value = "")
         {

@@ -6,7 +6,7 @@ using System.Linq;
 namespace ActLikeAI.Config
 {
     /// <summary>
-    /// Represents class that manages a collection of configuration files.
+    /// Represents a class that manages a collection of configuration files.
     /// </summary>
     public class ConfigManager
     {
@@ -52,7 +52,7 @@ namespace ActLikeAI.Config
         /// </summary>
         /// <typeparam name="T">Type of the return value.</typeparam>
         /// <param name="key">The key of the value to get.</param>
-        /// <returns>Value associated with the specified key converted to type T.</returns>
+        /// <returns>Value associated with the specified key converted to type <typeparamref name="T"/>.</returns>
         public T Get<T>(string key)
         {
             var split = SplitKey(key);
