@@ -28,11 +28,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Config.Ini\Config.Ini.csproj" />
     <ProjectReference Include="..\Config\Config.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Editor.cfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Editor.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Model.cfg">

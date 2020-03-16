@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ActLikeAI.Config.Ini</name>
+    </assembly>
+    <members>
+        <member name="T:ActLikeAI.Config.Ini.IniConfigProvider">
+            <summary>
+            Represents an INI configuration file format.
+            </summary>
+        </member>
+        <member name="M:ActLikeAI.Config.Ini.IniConfigProvider.Load(System.String)">
+            <summary>
+            Loads an INI configuration file.
+            </summary>
+            <param name="file">File to load.</param>
+            <returns>Root node of the loaded configuration tree.</returns>
+        </member>
+        <member name="M:ActLikeAI.Config.Ini.IniConfigProvider.Save(ActLikeAI.Config.ConfigNode,System.String)">
+            <summary>
+            Saves the configuration file.
+            </summary>
+            <param name="root">Root node of the configuration tree to save.</param>
+            <param name="saveLocation">Full path to the location where to save the file.</param>
+        </member>
+    </members>
+</doc>

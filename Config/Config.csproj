@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.1.0</Version>
     <Authors>Atila Čeki</Authors>
-    <Description>App configuration library for .Net Standard 2.0.</Description>
+    <Description>Application configuration library for .Net Standard 2.0. Includes XML configuration provider.</Description>
     <Copyright>Copyright (c) 2020 Atila Čeki. All rights reserved.</Copyright>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl></PackageIconUrl>
@@ -15,7 +15,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Company>ActLikeAI</Company>
     <RepositoryUrl>https://github.com/ActLikeAI/Config.git</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/ActLikeAI/Config/</PackageProjectUrl>
+    <PackageProjectUrl>https://www.actlikeai.com/libraries/config</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>configuration xml</PackageTags>   
   </PropertyGroup>
