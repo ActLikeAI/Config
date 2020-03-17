@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ActLikeAI.Config.UnitTest
 {
     [TestClass]
-    public class ConfigFileTest
+    public class ConfigXmlFileTest
     {
         private ConfigFile config;
 

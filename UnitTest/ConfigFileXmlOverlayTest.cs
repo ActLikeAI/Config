@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace ActLikeAI.Config.UnitTest
 {
     [TestClass]
-    public class ConfigFileOverlayTest
+    public class ConfigFileXmlOverlayTest
     {
         private ConfigFile config;
         private string tempDir;
