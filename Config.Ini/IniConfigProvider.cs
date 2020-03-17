@@ -78,7 +78,7 @@ namespace ActLikeAI.Config.Ini
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
-            parser.SaveFile(saveLocation, data);            
+            parser.WriteFile(saveLocation, data);            
         }
     }
 }
