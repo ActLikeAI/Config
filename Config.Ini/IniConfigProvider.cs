@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using IniParser;
+using IniParser.Model;
 
 namespace ActLikeAI.Config.Ini
 {
@@ -43,7 +44,41 @@ namespace ActLikeAI.Config.Ini
         /// <param name="saveLocation">Full path to the location where to save the file.</param>
         public void Save(ConfigNode root, string saveLocation)
         {
-            throw new NotImplementedException();
+            if (root is null)
+                throw new ArgumentNullException(nameof(root));
+
+            var parser = new FileIniDataParser();
+            var data = File.Exists(saveLocation) ? parser.ReadFile(saveLocation) : new IniData();
+
+            foreach (var node in root.Children)
+            {
+                if (node.Children.Count == 0)
+                {
+                    if (data.Global.ContainsKey(node.Key))
+                        data.Global[node.Key] = node.Value;
+                    else
+                        data.Global.AddKey(node.Key, node.Value);
+                }
+                else
+                {
+                    if (!data.Sections.ContainsSection(node.Key))                    
+                        data.Sections.AddSection(node.Key);
+
+                    foreach (var child in node.Children)
+                    {
+                        if (data.Sections[node.Key].ContainsKey(child.Key))
+                            data.Sections[node.Key][child.Key] = node.Value;
+                        else
+                            data.Sections[node.Key].AddKey(child.Key, child.Value);
+                    }
+                }            
+            }
+
+            string directory = Path.GetDirectoryName(saveLocation);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            parser.SaveFile(saveLocation, data);            
         }
     }
 }
