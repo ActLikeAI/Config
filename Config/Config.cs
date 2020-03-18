@@ -25,8 +25,7 @@ namespace ActLikeAI.Config
                 manager = new ConfigManager();
 
             var file = new ConfigFile(definitionFile, configProvider, cultureInfo, ignoreCase)
-                .AddAppData(saveDirectory, true)
-                .AddCurrentDirectory();
+                .AddAppData(saveDirectory, true);
 
             manager.Add(file);
         }
