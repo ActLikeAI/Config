@@ -5,7 +5,7 @@
     <AssemblyName>ActLikeAI.Config</AssemblyName>
     <RootNamespace>ActLikeAI.Config</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <Authors>Atila Čeki</Authors>
     <Description>Application configuration library for .Net Standard 2.0. Includes XML configuration provider.</Description>
     <Copyright>Copyright (c) 2020 Atila Čeki. All rights reserved.</Copyright>
