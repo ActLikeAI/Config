@@ -4,33 +4,31 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ActLikeAI.Config.Ini</AssemblyName>
     <RootNamespace>ActLikeAI.Config.Ini</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>  
+    <Description>INI configuration provider for ActLikeAI.Config.</Description>
+    <PackageIcon>Logo.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageTags>configuration ini</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
     <DocumentationFile>ActLikeAI.Config.Ini.xml</DocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Atila Čeki</Authors>
-    <Company>ActLikeAI</Company>
-    <Description>INI configuration provider for ActLikeAI.Config.</Description>
-    <Copyright>Copyright (c) 2020 Atila Čeki. All rights reserved.</Copyright>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://www.actlikeai.com/libraries/config</PackageProjectUrl>
-    <PackageIcon>Logo.png</PackageIcon>
-    <RepositoryUrl>https://github.com/ActLikeAI/Config.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>configuration ini</PackageTags>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\Config\Config.csproj" />
+    <ProjectReference Include="..\..\Source\Config.csproj" />
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="..\LICENSE">
+    <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\Logo.png">
+    <None Include="..\..\Logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

@@ -3,20 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ActLikeAI.Config</AssemblyName>
-    <RootNamespace>ActLikeAI.Config</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>ActLikeAI.Config</RootNamespace>    
     <Version>2.2.0</Version>
-    <Authors>Atila Čeki</Authors>
-    <Description>Application configuration library for .Net Standard 2.0. Includes XML configuration provider.</Description>
-    <Copyright>Copyright (c) 2020 Atila Čeki. All rights reserved.</Copyright>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageIconUrl></PackageIconUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Application configuration library for .Net Standard 2.0. Includes XML configuration provider.</Description>    
     <PackageIcon>Logo.png</PackageIcon>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Company>ActLikeAI</Company>
-    <RepositoryUrl>https://github.com/ActLikeAI/Config.git</RepositoryUrl>
-    <PackageProjectUrl>https://www.actlikeai.com/libraries/config</PackageProjectUrl>
-    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageTags>configuration xml</PackageTags>   
   </PropertyGroup>
 

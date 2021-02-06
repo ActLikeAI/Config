@@ -2,22 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
-    <IsPackable>false</IsPackable>
-
-    <AssemblyName>ActLikeAI.Config.UnitTest</AssemblyName>
-
-    <RootNamespace>ActLikeAI.Config.UnitTest</RootNamespace>
-
-    <Authors>Atila Čeki</Authors>
-
-    <Company>ActLikeAI</Company>
-
-    <Description>Unit test project for Config.</Description>
-
-    <Copyright>Copyright (c) 2020 Atila Čeki. All rights reserved.</Copyright>
-
-    <Version>2.1.0</Version>
+    <BaseOutputPath>$(SolutionDir)Temp\$(MSBuildProjectName)-Runtime</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)Temp\$(MSBuildProjectName)</BaseIntermediateOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Config.Ini\Config.Ini.csproj" />
-    <ProjectReference Include="..\Config\Config.csproj" />
+    <ProjectReference Include="..\Samples\IniProvider\IniProvider.csproj" />
+    <ProjectReference Include="..\Source\Config.csproj" />
   </ItemGroup>
 
   <ItemGroup>
