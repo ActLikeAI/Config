@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Config\Config.csproj" />
+    <ProjectReference Include="..\..\Source\Config.csproj" />
   </ItemGroup>
 
   <ItemGroup>
